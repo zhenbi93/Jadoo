@@ -3,17 +3,21 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import { create } from 'zustand';
 import './index.css';
+import CreateTripPage from './CreateTripPage.jsx';
+import DailyItineraryPage from './DailyItineraryPage.jsx';
+import TripMapPage from './TripMapPage.jsx';
+import TripsPage from './TripsPage.jsx';
 
 const useConnection = create((set) => ({
-  status: '检查中',
+  status: 'check',
   async check() {
-    set({ status: '检查中' });
+    set({ status: 'checking' });
     try {
       const response = await fetch('/api/health');
       const healthy = response.ok && (await response.json()).status === 'ok';
-      set({ status: healthy ? '已连接' : '无法连接' });
+      set({ status: healthy ? 'linked' : 'unable to link' });
     } catch {
-      set({ status: '无法连接' });
+      set({ status: 'unable to connect' });
     }
   },
 }));
@@ -39,8 +43,12 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<EnvironmentStatus />} />
-        <Route path="*" element={<Link to="/">返回首页</Link>} />
+        <Route path="/" element={<TripsPage />} />
+        <Route path="/trips/new" element={<CreateTripPage />} />
+        <Route path="/trips/rome/itinerary/day-2" element={<DailyItineraryPage />} />
+        <Route path="/trips/:city/map" element={<TripMapPage />} />
+        <Route path="/status" element={<EnvironmentStatus />} />
+        <Route path="*" element={<Link to="/">Back to My trips</Link>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
