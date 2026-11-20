@@ -1,4 +1,4 @@
-# Travel Notebook
+# Jadoo
 
 The local development setup uses Node.js 24 and npm workspaces.
 
